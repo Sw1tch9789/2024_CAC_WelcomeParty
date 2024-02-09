@@ -1,0 +1,6 @@
+{
+    "packages": [
+        "numpy",
+        "opencv-python"
+    ]
+}
