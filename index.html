@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <!-- Meta -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!-- CSS  -->
+    <link rel="stylesheet" href="https://unpkg.com/sanitize.css">
+    <link rel="stylesheet" href="./css/style.css">
+    <!-- Title -->
+    <title>KSU 新歓祭</title>
+    <!-- JavaScript -->
+    <script src="https://docs.opencv.org/4.9.0/opencv.js" defer></script>
+    <script src="./js/main.js" defer></script>
+    <script src="./js/transform.js" defer></script>
+</head>
+
+<body>
+    <header>
+        <h1>KSU 新歓祭</h1>
+    </header>
+
+    <main>
+        <h1>javascriptでOpenCVを使用する</h1>
+        <hr>
+        <table>
+            <tbody>
+                <tr>
+                    <td><input id="file-input" type="file" accept="imgae/*"></td>
+                    <td><button id="transform-button">変換</button><br></td>
+                </tr>
+                <tr>
+                    <td><img id="src-img" alt="No Image"></td>
+                    <td><canvas id="result-img"></canvas></td>
+                </tr>
+            </tbody>
+        </table>
+        <hr>
+    </main>
+
+    <footer>
+        <p>KSU 新歓祭</p>
+    </footer>
+</body>
+
+</html>
