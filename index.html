@@ -9,38 +9,156 @@
     <link rel="stylesheet" href="https://unpkg.com/sanitize.css">
     <link rel="stylesheet" href="./css/style.css">
     <!-- Title -->
-    <title>KSU 新歓祭</title>
-    <!-- JavaScript -->
-    <script src="https://docs.opencv.org/4.9.0/opencv.js" defer></script>
-    <script src="./js/main.js" defer></script>
-    <script src="./js/transform.js" defer></script>
+    <title>画像変換ツール - 2024年度新歓祭 C.A.C.</title>
+    <!-- OpenCV.js -->
+    <script src="./js/utils.js"></script>
+    <!-- TensorFlow.js -->
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs/dist/tf.min.js"></script>
+    <!-- My Scripts -->
+    <script src="./js/transform.js"></script>
+    <script src="./js/main.js"></script>
 </head>
 
 <body>
+    <!-- ヘッダー -->
     <header>
-        <h1>KSU 新歓祭</h1>
+        <p>2024年度新歓祭 C.A.C.</p>
+        <h1>画像変換ツール</h1>
+        <!-- メニュー -->
+        <div id="menu">
+            <label class="menu-dropdown-toggle">
+                <img id="menu-icon-open" class="inline-icon" src="./img/menu-svgrepo-com.svg">
+                <img id="menu-icon-close" class="inline-icon" src="./img/cross-svgrepo-com.svg">
+                <input type="checkbox" autocomplete="off">
+            </label>
+            <ul class="menu-dropdown-list">
+                <li class="menu-dropdown-item">
+                    <img class="inline-icon" src="./img/ks2030_logo.svg">京産大HP C.A.C.紹介ページ
+                    <a href="https://www.kyoto-su.ac.jp/campuslife/club/intro/0090.html" target="_blank"
+                        rel="noopener noreferrer"></a>
+                </li>
+                <li class="menu-dropdown-item">
+                    <img class="inline-icon" src="./img/X-logo.svg">C.A.C.公式𝕏
+                    <a href="https://x.com/c_a_c_official" target="_blank" rel="noopener noreferrer"></a>
+                </li>
+                <li class="menu-dropdown-item">
+                    <img class="inline-icon" src="./img/Instagram_Glyph_Gradient.svg">C.A.C.公式Instagram
+                    <a href="https://www.instagram.com/c_a_c_official" target="_blank" rel="noopener noreferrer"></a>
+                </li>
+            </ul>
+        </div>
     </header>
 
+    <!-- 変換選択ナビゲーション -->
+    <nav id="transform-nav">
+        <ul class="nav-list">
+            <li id="transform-gray-scale" class="nav-item transform-select">
+                <p>変換1</p>
+            </li>
+            <li id="transform-face" class="nav-item transform-select">
+                <p>変換2</p>
+            </li>
+            <li class="nav-item">
+                <label class="transform-dropdown-toggle">
+                    <p>変換3</p>
+                    <img id="transform-icon-open" class="inline-icon" src="./img/triangle-down-svgrepo-com.svg">
+                    <img id="transform-icon-close" class="inline-icon" src="./img/triangle-up-svgrepo-com.svg">
+                    <input type="checkbox" autocomplete="off">
+                </label>
+                <ul class="transform-dropdown-list">
+                    <li id="transform-3-1" class="transform-dropdown-item transform-select">
+                        <p>変換3-1</p>
+                    </li>
+                    <li id="transform-3-2" class="transform-dropdown-item transform-select">
+                        <p>変換3-2</p>
+                    </li>
+                    <li id="transform-3-3" class="transform-dropdown-item transform-select">
+                        <p>変換3-3</p>
+                    </li>
+                </ul>
+            </li>
+            <li class="nav-item">
+                <label class="transform-dropdown-toggle">
+                    <p>変換4</p>
+                    <img id="transform-icon-open" class="inline-icon" src="./img/triangle-down-svgrepo-com.svg">
+                    <img id="transform-icon-close" class="inline-icon" src="./img/triangle-up-svgrepo-com.svg">
+                    <input type="checkbox" autocomplete="off">
+                </label>
+                <ul class="transform-dropdown-list">
+                    <li id="transform-4-1" class="transform-dropdown-item transform-select">
+                        <p>変換4-1</p>
+                    </li>
+                    <li id="transform-4-2" class="transform-dropdown-item transform-select">
+                        <p>変換4-2</p>
+                    </li>
+                    <li id="transform-4-3" class="transform-dropdown-item transform-select">
+                        <p>変換4-3</p>
+                    </li>
+                    <li id="transform-4-4" class="transform-dropdown-item transform-select">
+                        <p>変換4-4</p>
+                    </li>
+                    <li id="transform-4-5" class="transform-dropdown-item transform-select">
+                        <p>変換4-5</p>
+                    </li>
+                </ul>
+            </li>
+            <li id="transform-face-2" class="nav-item transform-select">
+                <p>変換5</p>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- メイン -->
     <main>
-        <h1>javascriptでOpenCVを使用する</h1>
-        <hr>
-        <table>
+        <!-- 現在の変換名 -->
+        <div id="current-transform-name">
+            <p>
+                変換名&nbsp;<span>グレイスケール</span>
+            </p>
+        </div>
+
+        <!-- 変換ツール -->
+        <table id="transform-tool">
+            <thead>
+                <tr>
+                    <th><u>入力画像</u></th>
+                    <th></th>
+                    <th><u>出力画像</u></th>
+                </tr>
+            </thead>
             <tbody>
                 <tr>
                     <td><input id="file-input" type="file" accept="imgae/*"></td>
-                    <td><button id="transform-button">変換</button><br></td>
                 </tr>
                 <tr>
-                    <td><img id="src-img" alt="No Image"></td>
-                    <td><canvas id="result-img"></canvas></td>
+                    <td>
+                        <canvas id="src-img"></canvas>
+                    </td>
+                    <td>
+                        <button id="transform-button" disabled>
+                            <p>変換</p>
+                            <div id="transform-loading">
+                                <p>please wait...</p>
+                                <div class="loader"></div>
+                            </div>
+                        </button>
+                    </td>
+                    <td>
+                        <canvas id="result-img"></canvas>
+                    </td>
                 </tr>
             </tbody>
         </table>
-        <hr>
+
+        <br>
+
+        <!-- OpenCV.js のエラーメッセージ表示場所 -->
+        <p id="errorMessage"></p>
     </main>
 
+    <!-- フッター -->
     <footer>
-        <p>KSU 新歓祭</p>
+        <p><span>©</span>&nbsp;&nbsp;2024&nbsp;&nbsp;京都産業大学 電子計算機応用部 C.A.C.</p>
     </footer>
 </body>
 
