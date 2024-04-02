@@ -303,10 +303,9 @@ td:has(#src-img) {
     background-color: white;
 }
 
-img#src-img {
+canvas#src-img {
     width: 100%;
-    /* aspect-ratio: 1/1; */
-    /* object-fit: contain; */
+    aspect-ratio: 1/1;
 }
 
 /* 変換ボタン */
@@ -398,14 +397,15 @@ button#transform-button:hover {
 
 /* 出力画像キャンバス */
 td:has(#result-img) {
-    /* width: 40%; */
+    width: 40%;
     border: 1px solid black;
     background-color: white;
 }
 
-/* canvas#result-img {
-
-} */
+canvas#result-img {
+    width: 100%;
+    aspect-ratio: 1/1;
+}
 
 /* フッター */
 footer {

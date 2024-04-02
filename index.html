@@ -10,10 +10,13 @@
     <link rel="stylesheet" href="./css/style.css">
     <!-- Title -->
     <title>画像変換ツール - 2024年度新歓祭 C.A.C.</title>
+
     <!-- OpenCV.js -->
     <script src="./js/utils.js"></script>
     <!-- TensorFlow.js -->
-    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs/dist/tf.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.17.0/dist/tf.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-vis@1.5.1/dist/tfjs-vis.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/mobilenet@1.0.0"></script>
     <!-- My Scripts -->
     <script src="./js/transform.js"></script>
     <script src="./js/main.js"></script>
@@ -27,22 +30,22 @@
         <!-- メニュー -->
         <div id="menu">
             <label class="menu-dropdown-toggle">
-                <img id="menu-icon-open" class="inline-icon" src="./img/menu-svgrepo-com.svg">
-                <img id="menu-icon-close" class="inline-icon" src="./img/cross-svgrepo-com.svg">
+                <img id="menu-icon-open" class="inline-icon" src="./image/menu-svgrepo-com.svg">
+                <img id="menu-icon-close" class="inline-icon" src="./image/cross-svgrepo-com.svg">
                 <input type="checkbox" autocomplete="off">
             </label>
             <ul class="menu-dropdown-list">
                 <li class="menu-dropdown-item">
-                    <img class="inline-icon" src="./img/ks2030_logo.svg">京産大HP C.A.C.紹介ページ
+                    <img class="inline-icon" src="./image/ks2030_logo.svg">京産大HP C.A.C.紹介ページ
                     <a href="https://www.kyoto-su.ac.jp/campuslife/club/intro/0090.html" target="_blank"
                         rel="noopener noreferrer"></a>
                 </li>
                 <li class="menu-dropdown-item">
-                    <img class="inline-icon" src="./img/X-logo.svg">C.A.C.公式𝕏
+                    <img class="inline-icon" src="./image/X-logo.svg">C.A.C.公式𝕏
                     <a href="https://x.com/c_a_c_official" target="_blank" rel="noopener noreferrer"></a>
                 </li>
                 <li class="menu-dropdown-item">
-                    <img class="inline-icon" src="./img/Instagram_Glyph_Gradient.svg">C.A.C.公式Instagram
+                    <img class="inline-icon" src="./image/Instagram_Glyph_Gradient.svg">C.A.C.公式Instagram
                     <a href="https://www.instagram.com/c_a_c_official" target="_blank" rel="noopener noreferrer"></a>
                 </li>
             </ul>
@@ -52,7 +55,7 @@
     <!-- 変換選択ナビゲーション -->
     <nav id="transform-nav">
         <ul class="nav-list">
-            <li id="transform-gray-scale" class="nav-item transform-select">
+            <li id="transform-grayscale" class="nav-item transform-select">
                 <p>変換1</p>
             </li>
             <li id="transform-face" class="nav-item transform-select">
@@ -61,12 +64,12 @@
             <li class="nav-item">
                 <label class="transform-dropdown-toggle">
                     <p>変換3</p>
-                    <img id="transform-icon-open" class="inline-icon" src="./img/triangle-down-svgrepo-com.svg">
-                    <img id="transform-icon-close" class="inline-icon" src="./img/triangle-up-svgrepo-com.svg">
+                    <img id="transform-icon-open" class="inline-icon" src="./image/triangle-down-svgrepo-com.svg">
+                    <img id="transform-icon-close" class="inline-icon" src="./image/triangle-up-svgrepo-com.svg">
                     <input type="checkbox" autocomplete="off">
                 </label>
                 <ul class="transform-dropdown-list">
-                    <li id="transform-3-1" class="transform-dropdown-item transform-select">
+                    <li id="transform-tfjs" class="transform-dropdown-item transform-select">
                         <p>変換3-1</p>
                     </li>
                     <li id="transform-3-2" class="transform-dropdown-item transform-select">
@@ -80,8 +83,8 @@
             <li class="nav-item">
                 <label class="transform-dropdown-toggle">
                     <p>変換4</p>
-                    <img id="transform-icon-open" class="inline-icon" src="./img/triangle-down-svgrepo-com.svg">
-                    <img id="transform-icon-close" class="inline-icon" src="./img/triangle-up-svgrepo-com.svg">
+                    <img id="transform-icon-open" class="inline-icon" src="./image/triangle-down-svgrepo-com.svg">
+                    <img id="transform-icon-close" class="inline-icon" src="./image/triangle-up-svgrepo-com.svg">
                     <input type="checkbox" autocomplete="off">
                 </label>
                 <ul class="transform-dropdown-list">
@@ -113,7 +116,7 @@
         <!-- 現在の変換名 -->
         <div id="current-transform-name">
             <p>
-                変換名&nbsp;<span>グレイスケール</span>
+                変換名&nbsp;<span>グレースケール</span>
             </p>
         </div>
 

@@ -1,12 +1,8 @@
-// 変換名と変換処理のマッピング
-let transformMap = {
-    'transform-gray-scale': ['グレイスケール', transformGrayScale],
-    'transform-face': ['顔認識', transformFace],
-};
-
 window.onload = function () {
     // エレメントの取得
+    let transformSelectElts = document.getElementsByClassName('transform-select');
     let currentTransformNameElt = document.getElementById('current-transform-name').getElementsByTagName('span')[0];
+    let fileInputElt = document.getElementById('file-input');
     let srcImgElt = document.getElementById('src-img');
     let transformButtonElt = document.getElementById('transform-button');
     let resultImgElt = document.getElementById('result-img');
@@ -15,8 +11,14 @@ window.onload = function () {
     // Utilsクラスのインスタンスを生成
     let utils = new Utils('errorMessage');
 
+    // 画像が選択されているか
+    let isImageSelected = false;
+
     // ファイル入力のイベントリスナーを設定
     utils.addFileInputHandler('file-input', 'src-img');
+    fileInputElt.addEventListener('change', function () {
+        isImageSelected = true;
+    });
 
     // OpenCVのロード
     utils.loadOpenCv(() => {
@@ -31,11 +33,10 @@ window.onload = function () {
         });
     });
 
-    // 現在の変換処理名
-    let currentTransform = transformGrayScale;
+    // 現在の変換処理
+    let currentTransform = transformMap['transform-grayscale'][1];
 
     // 変換処理選択ボタンのイベントリスナーを設定
-    let transformSelectElts = document.getElementsByClassName('transform-select');
     for (let elt of transformSelectElts) {
         elt.addEventListener('click', function () {
             currentTransformNameElt.textContent = transformMap[elt.id][0];
@@ -46,17 +47,17 @@ window.onload = function () {
     // 変換ボタンが押されたときの処理
     transformButtonElt.addEventListener('click', function () {
         // 画像が読み込まれていない場合は何もしない
-        if (srcImgElt.src == '') return;
+        if (!isImageSelected) return;
         // ボタンを無効化
-        transformButtonElt.disabled = true;
+        transformButtonElt.setAttribute('disabled', '');
         // ローディングアニメーションを表示
         transformLoadingElt.style.visibility = 'visible';
         // 変換処理
+        console.log('currentTransform: ', currentTransform.name);
         currentTransform(srcImgElt, resultImgElt);
         // ローディングアニメーションを非表示
         transformLoadingElt.style.visibility = 'hidden';
         // ボタンを有効化
-        transformButtonElt.disabled = false;
+        transformButtonElt.removeAttribute('disabled');
     });
 };
-

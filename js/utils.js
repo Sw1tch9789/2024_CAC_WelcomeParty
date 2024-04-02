@@ -55,8 +55,8 @@ function Utils(errorOutputId) {
         let img = new Image();
         img.crossOrigin = 'anonymous';
         img.onload = function () {
-            // canvas.width = img.width;
-            canvas.height = img.height;
+            canvas.width = Math.max(img.width, img.height);
+            canvas.height = Math.max(img.width, img.height);
             ctx.drawImage(img, 0, 0, img.width, img.height);
         };
         img.src = url;

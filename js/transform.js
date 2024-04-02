@@ -1,3 +1,10 @@
+// 変換idと、変換名・変換処理のマッピング
+const transformMap = {
+    'transform-grayscale': ['グレースケール', transformGrayScale],
+    'transform-face': ['顔認識', transformFace],
+    'transform-tfjs': ['TensorFlow.js', transformTfjs],
+};
+
 // 白黒に変換
 function transformGrayScale(srcImgElt, resultImgElt) {
     let imgMat = cv.imread(srcImgElt);
@@ -41,4 +48,11 @@ function transformFace(srcImgElt, resultImgElt) {
     cv.imshow(resultImgElt, src);
     src.delete(); gray.delete(); faceCascade.delete();
     eyeCascade.delete(); faces.delete(); eyes.delete();
+}
+
+function transformTfjs(srcImgElt, resultImgElt) {
+    // 画像をTensorFlow.jsのテンソルに変換
+    let image = tf.browser.fromPixels(srcImgElt, 1);
+    // 画像を表示
+    tf.browser.toPixels(image, resultImgElt);
 }
