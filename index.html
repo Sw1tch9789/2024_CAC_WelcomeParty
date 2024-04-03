@@ -15,8 +15,6 @@
     <script src="./js/utils.js"></script>
     <!-- TensorFlow.js -->
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.17.0/dist/tf.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-vis@1.5.1/dist/tfjs-vis.umd.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/mobilenet@1.0.0"></script>
     <!-- My Scripts -->
     <script src="./js/transform.js"></script>
     <script src="./js/main.js"></script>
@@ -25,7 +23,7 @@
 <body>
     <!-- ヘッダー -->
     <header>
-        <p>2024年度新歓祭 C.A.C.</p>
+        <p>2024年度新歓祭 C.A.C. チーム8</p>
         <h1>画像変換ツール</h1>
         <!-- メニュー -->
         <div id="menu">
@@ -56,57 +54,39 @@
     <nav id="transform-nav">
         <ul class="nav-list">
             <li id="transform-grayscale" class="nav-item transform-select">
-                <p>変換1</p>
+                <p>グレースケール</p>
             </li>
             <li id="transform-face" class="nav-item transform-select">
-                <p>変換2</p>
+                <p>顔検出</p>
             </li>
             <li class="nav-item">
                 <label class="transform-dropdown-toggle">
-                    <p>変換3</p>
+                    <p>画風変換</p>
                     <img id="transform-icon-open" class="inline-icon" src="./image/triangle-down-svgrepo-com.svg">
                     <img id="transform-icon-close" class="inline-icon" src="./image/triangle-up-svgrepo-com.svg">
                     <input type="checkbox" autocomplete="off">
                 </label>
                 <ul class="transform-dropdown-list">
-                    <li id="transform-tfjs" class="transform-dropdown-item transform-select">
-                        <p>変換3-1</p>
+                    <li id="transform-style-anime-forest" class="transform-dropdown-item transform-select">
+                        <p>アニメの森</p>
                     </li>
-                    <li id="transform-3-2" class="transform-dropdown-item transform-select">
-                        <p>変換3-2</p>
+                    <li id="transform-style-fuji" class="transform-dropdown-item transform-select">
+                        <p>富士山</p>
                     </li>
-                    <li id="transform-3-3" class="transform-dropdown-item transform-select">
-                        <p>変換3-3</p>
+                    <li id="transform-style-moon" class="transform-dropdown-item transform-select">
+                        <p>月面</p>
                     </li>
+                    <li id="transform-style-newspaper" class="transform-dropdown-item transform-select">
+                        <p>新聞紙</p>
+                    </li>
+                    <li id="transform-style-polka-dot" class="transform-dropdown-item transform-select">
+                        <p>水玉模様</p>
+                    </li>
+                    <li id="transform-style-sunset-sky" class="transform-dropdown-item transform-select">
+                        <p>夕焼け</p>
+                    </li>
+
                 </ul>
-            </li>
-            <li class="nav-item">
-                <label class="transform-dropdown-toggle">
-                    <p>変換4</p>
-                    <img id="transform-icon-open" class="inline-icon" src="./image/triangle-down-svgrepo-com.svg">
-                    <img id="transform-icon-close" class="inline-icon" src="./image/triangle-up-svgrepo-com.svg">
-                    <input type="checkbox" autocomplete="off">
-                </label>
-                <ul class="transform-dropdown-list">
-                    <li id="transform-4-1" class="transform-dropdown-item transform-select">
-                        <p>変換4-1</p>
-                    </li>
-                    <li id="transform-4-2" class="transform-dropdown-item transform-select">
-                        <p>変換4-2</p>
-                    </li>
-                    <li id="transform-4-3" class="transform-dropdown-item transform-select">
-                        <p>変換4-3</p>
-                    </li>
-                    <li id="transform-4-4" class="transform-dropdown-item transform-select">
-                        <p>変換4-4</p>
-                    </li>
-                    <li id="transform-4-5" class="transform-dropdown-item transform-select">
-                        <p>変換4-5</p>
-                    </li>
-                </ul>
-            </li>
-            <li id="transform-face-2" class="nav-item transform-select">
-                <p>変換5</p>
             </li>
         </ul>
     </nav>

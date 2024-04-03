@@ -1,8 +1,15 @@
 // 変換idと、変換名・変換処理のマッピング
 const transformMap = {
     'transform-grayscale': ['グレースケール', transformGrayScale],
-    'transform-face': ['顔認識', transformFace],
-    'transform-tfjs': ['TensorFlow.js', transformTfjs],
+    'transform-face': ['顔検出', transformFace],
+    'transform-style-anime-forest': ['アニメの森みたいな画風', transformStyleAnimeForest],
+    'transform-style-fuji': ['富士山みたいな画風', transformStyleFuji],
+    'transform-style-moon': ['月面みたいな画風', transformStyleMoon],
+    'transform-style-newspaper': ['新聞紙みたいな画風', transformStyleNewspaper],
+    'transform-style-polka-dot': ['水玉模様みたいな画風', transformStylePolkaDot],
+    'transform-style-sunset-sky': ['夕焼けの空みたいな画風', transformStyleSunsetSky],
+
+
 };
 
 // 白黒に変換
@@ -50,9 +57,94 @@ function transformFace(srcImgElt, resultImgElt) {
     eyeCascade.delete(); faces.delete(); eyes.delete();
 }
 
-function transformTfjs(srcImgElt, resultImgElt) {
-    // 画像をTensorFlow.jsのテンソルに変換
-    let image = tf.browser.fromPixels(srcImgElt, 1);
-    // 画像を表示
-    tf.browser.toPixels(image, resultImgElt);
+function transformArbitraryImageStylization(srcImgElt, resultImgElt, styleImagePath) {
+    // コンテンツ画像をテンソルに変換
+    const contentImage = readImageAndAdjustForModel(srcImgElt);
+
+    // スタイル画像のためのエレメントを生成
+    let styleImageElt = new Image();
+    styleImageElt.src = styleImagePath;
+    styleImageElt.onload = () => {
+        // スタイル画像をテンソルに変換
+        const styleImage = readImageAndAdjustForModel(styleImageElt);
+        styleImageElt = null; // メモリの解放
+
+        // モデルのロード
+        const modelUrl = 'model/arbitrary-image-stylization/model.json';
+        tf.loadGraphModel(modelUrl).then(model => {
+            // スタイル変換
+            let stylizedImage = model.execute([contentImage, styleImage]);
+
+            // 画像を表示
+            adjustForCanvasAndShow(stylizedImage, resultImgElt);
+
+            // メモリの解放
+            contentImage.dispose(); styleImage.dispose(); model.dispose();
+        });
+    };
 }
+
+function transformStyleAnimeForest(srcImgElt, resultImgElt) {
+    transformArbitraryImageStylization(srcImgElt, resultImgElt, 'image/style-image/animeForest.png');
+}
+
+function transformStyleFuji(srcImgElt, resultImgElt) {
+    transformArbitraryImageStylization(srcImgElt, resultImgElt, 'image/style-image/fuji.jpg');
+}
+
+function transformStyleMoon(srcImgElt, resultImgElt) {
+    transformArbitraryImageStylization(srcImgElt, resultImgElt, 'image/style-image/moon.jpg');
+}
+
+function transformStyleNewspaper(srcImgElt, resultImgElt) {
+    transformArbitraryImageStylization(srcImgElt, resultImgElt, 'image/style-image/newspaper.jpg');
+}
+
+function transformStylePolkaDot(srcImgElt, resultImgElt) {
+    transformArbitraryImageStylization(srcImgElt, resultImgElt, 'image/style-image/polkaDot.png');
+}
+
+function transformStyleSunsetSky(srcImgElt, resultImgElt) {
+    transformArbitraryImageStylization(srcImgElt, resultImgElt, 'image/style-image/sunsetSky.jpg');
+}
+
+
+
+
+
+
+
+function readImageAndAdjustForModel(pixels) {
+    const max_dim = 512; // 画像の最大辺の長さ
+    return tf.tidy(() => {
+        // 画像を読み込む
+        let image = tf.browser.fromPixels(pixels);
+
+        // リサイズ
+        const shape = image.shape.slice(0, 2);
+        const longestDim = Math.max(shape[0], shape[1]);
+        const scale = max_dim / longestDim;
+        const newShape = shape.map(dim => Math.round(dim * scale));
+        image = tf.image.resizeBilinear(image, newShape);
+
+        // モデルに合わせて変換
+        image = image.expandDims();
+        image = tf.cast(image, 'float32');
+        image = tf.div(image, 255);
+
+        return image;
+    });
+}
+
+function adjustForCanvasAndShow(image, resultImgElt) {
+    tf.tidy(() => {
+        // キャンバスに合わせて変換
+        image = tf.mul(image, 255);
+        image = tf.squeeze(image, 0);
+        image = tf.cast(image, 'int32');
+
+        // 画像を表示
+        tf.browser.toPixels(image, resultImgElt);
+    });
+}
+

@@ -149,7 +149,7 @@ ul.nav-list {
 li.nav-item {
     height: calc(100% - 10px);
     width: 100%;
-    margin: 5px;
+    margin: 5px 10px 5px 0px;
     border-radius: 10px;
     position: relative;
     display: flex;
@@ -160,12 +160,17 @@ li.nav-item {
     background-color: #2C9CFF;
 }
 
+li.nav-item:first-child {
+    margin-left: 10px;
+}
+
 li.nav-item:hover {
     background-color: #2C73FF;
 }
 
 li.nav-item p {
     font-size: 40px;
+    text-align: center;
 }
 
 /* 変換ドロップダウンリスト */
@@ -278,7 +283,6 @@ div#current-transform-name>p>span {
 
 /* 変換ツール */
 table#transform-tool {
-
     width: 100%;
     text-align: center;
 }

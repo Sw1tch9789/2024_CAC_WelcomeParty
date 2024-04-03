@@ -34,11 +34,14 @@ window.onload = function () {
     });
 
     // 現在の変換処理
-    let currentTransform = transformMap['transform-grayscale'][1];
+    let currentTransformId = 'transform-grayscale';
+    currentTransformNameElt.textContent = transformMap[currentTransformId][0];
+    let currentTransform = transformMap[currentTransformId][1];
 
     // 変換処理選択ボタンのイベントリスナーを設定
     for (let elt of transformSelectElts) {
         elt.addEventListener('click', function () {
+            currentTransformId = elt.id;
             currentTransformNameElt.textContent = transformMap[elt.id][0];
             currentTransform = transformMap[elt.id][1];
         });
@@ -53,7 +56,7 @@ window.onload = function () {
         // ローディングアニメーションを表示
         transformLoadingElt.style.visibility = 'visible';
         // 変換処理
-        console.log('currentTransform: ', currentTransform.name);
+        console.log('transform name: ', currentTransform.name);
         currentTransform(srcImgElt, resultImgElt);
         // ローディングアニメーションを非表示
         transformLoadingElt.style.visibility = 'hidden';
