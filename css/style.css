@@ -1,0 +1,434 @@
+@charset "utf-8";
+
+/* カスタムプロパティー */
+:root {
+    --footer-height: 70px;
+}
+
+/* すべての要素 */
+* {
+    box-sizing: border-box;
+    margin: 0px;
+    padding: 0px;
+}
+
+/* html */
+html {
+    font-family: "ヒラギノ角ゴ Pro W3", "Hiragino KaKu Gothic Pro", "ＭＳ Ｐゴシック", "MS P Gothic", Osaka, sans-serif;
+    font-size: 25px;
+}
+
+/* ボディ */
+body {
+    position: relative;
+    min-height: 100vh;
+    padding-bottom: var(--footer-height);
+    background-color: aliceblue;
+}
+
+/* ヘッダー */
+header {
+    position: relative;
+    text-align: center;
+    background-color: white;
+}
+
+/* メニュー */
+div#menu {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    height: 100%;
+    width: 100px;
+}
+
+/* メニュードロップダウンリスト */
+label.menu-dropdown-toggle {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all .3s;
+    cursor: pointer;
+}
+
+label.menu-dropdown-toggle:hover {
+    background-color: #95a7b6;
+}
+
+label.menu-dropdown-toggle>img {
+    position: absolute;
+    height: 70%;
+    aspect-ratio: 1/1;
+    display: block;
+    transition: all .3s;
+}
+
+label.menu-dropdown-toggle>img#menu-icon-open {
+    opacity: 1;
+}
+
+label.menu-dropdown-toggle>img#menu-icon-close {
+    opacity: 0;
+}
+
+label.menu-dropdown-toggle:has(input:checked)>img#menu-icon-open {
+    opacity: 0;
+}
+
+label.menu-dropdown-toggle:has(input:checked)>img#menu-icon-close {
+    opacity: 1;
+}
+
+
+label.menu-dropdown-toggle:has(input:checked) {
+    background-color: #AAC0D2;
+    transition: all .3s;
+}
+
+label.menu-dropdown-toggle:has(input:checked):hover {
+    background-color: #95a7b6;
+}
+
+label.menu-dropdown-toggle>input {
+    display: none;
+}
+
+ul.menu-dropdown-list {
+    --width: 400px;
+    z-index: 2;
+    position: absolute;
+    top: 100%;
+    left: calc(100% - var(--width));
+    width: var(--width);
+    display: block;
+    transform-origin: top;
+    transform: scaleY(0);
+    transition: all .3s;
+}
+
+label.menu-dropdown-toggle:has(input:checked)+ul.menu-dropdown-list {
+    transform: scaleY(1);
+}
+
+li.menu-dropdown-item {
+    list-style-type: none;
+    position: relative;
+    height: 60px;
+    border-top: 2px solid white;
+    padding: 10px 0px;
+    display: flex;
+    justify-content: left;
+    align-items: center;
+    transition: all .3s;
+    background-color: #AAC0D2;
+}
+
+li.menu-dropdown-item:hover {
+    background-color: #95a7b6;
+}
+
+li.menu-dropdown-item>img {
+    height: 80%;
+    aspect-ratio: 2/1;
+}
+
+li.menu-dropdown-item>a {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+/* 変換ナビゲーション */
+ul.nav-list {
+    height: 130px;
+    display: flex;
+}
+
+li.nav-item {
+    height: calc(100% - 10px);
+    width: 100%;
+    margin: 5px 10px 5px 0px;
+    border-radius: 10px;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all .3s;
+    cursor: pointer;
+    background-color: #2C9CFF;
+}
+
+li.nav-item:first-child {
+    margin-left: 10px;
+}
+
+li.nav-item:hover {
+    background-color: #2C73FF;
+}
+
+li.nav-item p {
+    font-size: 40px;
+    text-align: center;
+}
+
+/* 変換ドロップダウンリスト */
+label.transform-dropdown-toggle {
+    border-radius: inherit;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all .3s;
+    cursor: pointer;
+    background-color: #2C9CFF;
+}
+
+label.transform-dropdown-toggle:hover {
+    background-color: #2C73FF;
+}
+
+label.transform-dropdown-toggle>img {
+    position: absolute;
+    height: 70%;
+    aspect-ratio: 1/1;
+    display: block;
+    transition: all .3s;
+}
+
+label.transform-dropdown-toggle>img#transform-icon-open {
+    bottom: -24px;
+    opacity: 1;
+}
+
+label.transform-dropdown-toggle>img#transform-icon-close {
+    bottom: -18px;
+    opacity: 0;
+}
+
+label.transform-dropdown-toggle:has(input:checked)>img#transform-icon-open {
+    opacity: 0;
+}
+
+label.transform-dropdown-toggle:has(input:checked)>img#transform-icon-close {
+    opacity: 1;
+}
+
+label.transform-dropdown-toggle>input {
+    display: none;
+}
+
+ul.transform-dropdown-list {
+    z-index: 1;
+    position: absolute;
+    top: 100%;
+    border-radius: inherit;
+    width: 100%;
+    display: block;
+    transform-origin: top;
+    transform: scaleY(0);
+    transition: all .3s;
+    cursor: default;
+}
+
+label.transform-dropdown-toggle:has(input:checked)+ul.transform-dropdown-list {
+    transform: scaleY(1);
+}
+
+li.transform-dropdown-item {
+    list-style-type: none;
+    position: relative;
+    height: 60px;
+    margin-top: 3px;
+    border-radius: inherit;
+    padding: 10px 0px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all .3s;
+    background-color: #b1d9ff;
+    cursor: pointer;
+}
+
+li.transform-dropdown-item:hover {
+    background-color: #87b7e3;
+}
+
+/* メイン */
+main {
+    margin: 0px 10px;
+}
+
+/* 現在の変換名 */
+div#current-transform-name {
+    margin: 15px 0px;
+    display: flex;
+}
+
+div#current-transform-name>p {
+    border: 1px solid black;
+    border-radius: 20px;
+    padding: 5px 15px;
+    display: flex;
+    align-items: center;
+    background-color: white;
+    font-size: 25px;
+}
+
+div#current-transform-name>p>span {
+    font-size: 40px;
+}
+
+/* 変換ツール */
+table#transform-tool {
+    width: 100%;
+    text-align: center;
+}
+
+table#transform-tool>thead>th {
+    font-size: 40px;
+}
+
+/* ファイル入力 */
+input#file-input {
+    cursor: pointer;
+}
+
+td:has(input#file-input) {
+    text-align: left;
+}
+
+/* 入力画像 */
+td:has(#src-img) {
+    width: 40%;
+    border: 1px solid black;
+    background-color: white;
+}
+
+canvas#src-img {
+    width: 100%;
+    aspect-ratio: 1/1;
+}
+
+/* 変換ボタン */
+td:has(#transform-button) {
+    width: 20%;
+}
+
+button#transform-button {
+    position: relative;
+    margin: auto;
+    width: 60%;
+    border-radius: 20px;
+    aspect-ratio: 1/1;
+    transition: all .3s;
+    font-size: 30px;
+    cursor: pointer;
+    background-color: #9A8BF4;
+}
+
+button#transform-button:hover {
+    background-color: #796DC4;
+}
+
+/* ローディング */
+#transform-loading {
+    visibility: hidden;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#transform-loading>p {
+    position: absolute;
+    bottom: 100%;
+    font-size: 18px;
+}
+
+/* ローディングアニメーション */
+.loader,
+.loader:after {
+    border-radius: 50%;
+    width: 80%;
+    height: 80%;
+}
+
+.loader {
+    font-size: 10px;
+    position: absolute;
+    border-top: 1.1em solid rgba(255, 255, 255, 0.2);
+    border-right: 1.1em solid rgba(255, 255, 255, 0.2);
+    border-bottom: 1.1em solid rgba(255, 255, 255, 0.2);
+    border-left: 1.1em solid #ffffff;
+    -webkit-transform: translateZ(0);
+    -ms-transform: translateZ(0);
+    transform: translateZ(0);
+    -webkit-animation: load8 1.1s infinite linear;
+    animation: load8 1.1s infinite linear;
+}
+
+@-webkit-keyframes load8 {
+    0% {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+
+    100% {
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes load8 {
+    0% {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+
+    100% {
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
+}
+
+
+/* 出力画像キャンバス */
+td:has(#result-img) {
+    width: 40%;
+    border: 1px solid black;
+    background-color: white;
+}
+
+canvas#result-img {
+    width: 100%;
+    aspect-ratio: 1/1;
+}
+
+/* フッター */
+footer {
+    position: absolute;
+    bottom: 0px;
+    height: var(--footer-height);
+    width: 100%;
+    padding-right: 20px;
+    display: flex;
+    justify-content: right;
+    align-items: center;
+    background-color: #c3c3c3;
+}
+
+footer>p {
+    display: flex;
+    align-items: center;
+}
+
+footer>p>span {
+    font-size: 45px;
+}
