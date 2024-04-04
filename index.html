@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <!-- Meta -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!-- CSS  -->
+    <link rel="stylesheet" href="https://unpkg.com/sanitize.css">
+    <link rel="stylesheet" href="./css/style.css">
+    <!-- Title -->
+    <title>画像変換ツール - 2024年度新歓祭 C.A.C.</title>
+
+    <!-- OpenCV.js -->
+    <script src="./js/utils.js"></script>
+    <!-- TensorFlow.js -->
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.17.0/dist/tf.min.js"></script>
+    <!-- My Scripts -->
+    <script src="./js/transform.js"></script>
+    <script src="./js/main.js"></script>
+</head>
+
+<body>
+    <!-- ヘッダー -->
+    <header>
+        <p>2024年度新歓祭 C.A.C. チーム8</p>
+        <h1>画像変換ツール</h1>
+        <!-- メニュー -->
+        <div id="menu">
+            <label class="menu-dropdown-toggle">
+                <img id="menu-icon-open" class="inline-icon" src="./image/menu-svgrepo-com.svg">
+                <img id="menu-icon-close" class="inline-icon" src="./image/cross-svgrepo-com.svg">
+                <input type="checkbox" autocomplete="off">
+            </label>
+            <ul class="menu-dropdown-list">
+                <li class="menu-dropdown-item">
+                    <img class="inline-icon" src="./image/ks2030_logo.svg">京産大HP C.A.C.紹介ページ
+                    <a href="https://www.kyoto-su.ac.jp/campuslife/club/intro/0090.html" target="_blank"
+                        rel="noopener noreferrer"></a>
+                </li>
+                <li class="menu-dropdown-item">
+                    <img class="inline-icon" src="./image/X-logo.svg">C.A.C.公式𝕏
+                    <a href="https://x.com/c_a_c_official" target="_blank" rel="noopener noreferrer"></a>
+                </li>
+                <li class="menu-dropdown-item">
+                    <img class="inline-icon" src="./image/Instagram_Glyph_Gradient.svg">C.A.C.公式Instagram
+                    <a href="https://www.instagram.com/c_a_c_official" target="_blank" rel="noopener noreferrer"></a>
+                </li>
+            </ul>
+        </div>
+    </header>
+
+    <!-- 変換選択ナビゲーション -->
+    <nav id="transform-nav">
+        <ul class="nav-list">
+            <li id="transform-grayscale" class="nav-item transform-select">
+                <p>グレースケール</p>
+            </li>
+            <li id="transform-face" class="nav-item transform-select">
+                <p>顔検出</p>
+            </li>
+            <li class="nav-item">
+                <label class="transform-dropdown-toggle">
+                    <p>画風変換</p>
+                    <img id="transform-icon-open" class="inline-icon" src="./image/triangle-down-svgrepo-com.svg">
+                    <img id="transform-icon-close" class="inline-icon" src="./image/triangle-up-svgrepo-com.svg">
+                    <input type="checkbox" autocomplete="off">
+                </label>
+                <ul class="transform-dropdown-list">
+                    <li id="transform-style-anime-forest" class="transform-dropdown-item transform-select">
+                        <p>アニメの森</p>
+                    </li>
+                    <li id="transform-style-fuji" class="transform-dropdown-item transform-select">
+                        <p>富士山</p>
+                    </li>
+                    <li id="transform-style-moon" class="transform-dropdown-item transform-select">
+                        <p>月面</p>
+                    </li>
+                    <li id="transform-style-newspaper" class="transform-dropdown-item transform-select">
+                        <p>新聞紙</p>
+                    </li>
+                    <li id="transform-style-polka-dot" class="transform-dropdown-item transform-select">
+                        <p>水玉模様</p>
+                    </li>
+                    <li id="transform-style-sunset-sky" class="transform-dropdown-item transform-select">
+                        <p>夕焼け</p>
+                    </li>
+
+                </ul>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- メイン -->
+    <main>
+        <!-- 現在の変換名 -->
+        <div id="current-transform-name">
+            <p>
+                変換名&nbsp;<span>グレースケール</span>
+            </p>
+        </div>
+
+        <!-- 変換ツール -->
+        <table id="transform-tool">
+            <thead>
+                <tr>
+                    <th><u>入力画像</u></th>
+                    <th></th>
+                    <th><u>出力画像</u></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><input id="file-input" type="file" accept="imgae/*"></td>
+                </tr>
+                <tr>
+                    <td>
+                        <canvas id="src-img"></canvas>
+                    </td>
+                    <td>
+                        <button id="transform-button" disabled>
+                            <p>変換</p>
+                            <div id="transform-loading">
+                                <p>please wait...</p>
+                                <div class="loader"></div>
+                            </div>
+                        </button>
+                    </td>
+                    <td>
+                        <canvas id="result-img"></canvas>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <br>
+
+        <!-- OpenCV.js のエラーメッセージ表示場所 -->
+        <p id="errorMessage"></p>
+    </main>
+
+    <!-- フッター -->
+    <footer>
+        <p><span>©</span>&nbsp;&nbsp;2024&nbsp;&nbsp;京都産業大学 電子計算機応用部 C.A.C.</p>
+    </footer>
+</body>
+
+</html>
