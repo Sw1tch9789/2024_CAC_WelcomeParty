@@ -8,23 +8,26 @@ const transformMap = {
     'transform-style-newspaper': ['新聞紙みたいな画風', transformStyleNewspaper],
     'transform-style-polka-dot': ['水玉模様みたいな画風', transformStylePolkaDot],
     'transform-style-sunset-sky': ['夕焼けの空みたいな画風', transformStyleSunsetSky],
-
-
 };
 
 // 白黒に変換
 function transformGrayScale(srcImgElt, resultImgElt) {
-    let imgMat = cv.imread(srcImgElt);
-    cv.cvtColor(imgMat, imgMat, cv.COLOR_RGBA2GRAY, 0);
-    cv.imshow(resultImgElt, imgMat);
-    imgMat.delete();
+    let image = cv.imread(srcImgElt); // 画像を読み込む
+    image = adjustImageSize(image); // 画像のリサイズ
+    cv.cvtColor(image, image, cv.COLOR_RGBA2GRAY, 0); // グレースケールに変換
+    cv.imshow(resultImgElt, image); // 画像を表示
+    image.delete(); // メモリの解放
 }
 
 // 顔を検出
 function transformFace(srcImgElt, resultImgElt) {
-    let src = cv.imread(srcImgElt);
+    // 画像を読み込む
+    let image = cv.imread(srcImgElt);
+    // 画像のリサイズ
+    image = adjustImageSize(image);
+    // グレースケールに変換
     let gray = new cv.Mat();
-    cv.cvtColor(src, gray, cv.COLOR_RGBA2GRAY, 0);
+    cv.cvtColor(image, gray, cv.COLOR_RGBA2GRAY, 0);
     let faces = new cv.RectVector();
     let eyes = new cv.RectVector();
     let faceCascade = new cv.CascadeClassifier();
@@ -37,11 +40,11 @@ function transformFace(srcImgElt, resultImgElt) {
     faceCascade.detectMultiScale(gray, faces, 1.1, 3, 0, msize, msize);
     for (let i = 0; i < faces.size(); ++i) {
         let roiGray = gray.roi(faces.get(i));
-        let roiSrc = src.roi(faces.get(i));
+        let roiSrc = image.roi(faces.get(i));
         let point1 = new cv.Point(faces.get(i).x, faces.get(i).y);
         let point2 = new cv.Point(faces.get(i).x + faces.get(i).width,
             faces.get(i).y + faces.get(i).height);
-        cv.rectangle(src, point1, point2, [255, 0, 0, 255]);
+        cv.rectangle(image, point1, point2, [255, 0, 0, 255]);
         // detect eyes in face ROI
         eyeCascade.detectMultiScale(roiGray, eyes);
         for (let j = 0; j < eyes.size(); ++j) {
@@ -52,78 +55,89 @@ function transformFace(srcImgElt, resultImgElt) {
         }
         roiGray.delete(); roiSrc.delete();
     }
-    cv.imshow(resultImgElt, src);
-    src.delete(); gray.delete(); faceCascade.delete();
+    cv.imshow(resultImgElt, image);
+    image.delete(); gray.delete(); faceCascade.delete();
     eyeCascade.delete(); faces.delete(); eyes.delete();
 }
 
-function transformArbitraryImageStylization(srcImgElt, resultImgElt, styleImagePath) {
+// 画像のサイズを512x512以下に調整
+function adjustImageSize(image) {
+    const MAX_LENGTH = 512;
+    const size = image.size();
+    const longer = Math.max(size.height, size.width);
+    const scale = MAX_LENGTH / longer;
+    const newSize = new cv.Size(size.width * scale, size.height * scale);
+    cv.resize(image, image, newSize);
+    return image;
+}
+
+// 任意の画風変換
+async function transformArbitraryImageStylization(srcImgElt, resultImgElt, styleImagePath) {
     // コンテンツ画像をテンソルに変換
-    const contentImage = readImageAndAdjustForModel(srcImgElt);
+    const contentImage = readAndAdjustForModel(srcImgElt);
 
-    // スタイル画像のためのエレメントを生成
-    let styleImageElt = new Image();
-    styleImageElt.src = styleImagePath;
-    styleImageElt.onload = () => {
-        // スタイル画像をテンソルに変換
-        const styleImage = readImageAndAdjustForModel(styleImageElt);
-        styleImageElt = null; // メモリの解放
+    // スタイル画像を読み込む
+    let styleImageElt = await loadImage(styleImagePath);
 
-        // モデルのロード
-        const modelUrl = 'model/arbitrary-image-stylization/model.json';
-        tf.loadGraphModel(modelUrl).then(model => {
-            // スタイル変換
-            let stylizedImage = model.execute([contentImage, styleImage]);
+    // スタイル画像をテンソルに変換
+    const styleImage = readAndAdjustForModel(styleImageElt);
+    styleImageElt = null; // メモリの解放
 
-            // 画像を表示
-            adjustForCanvasAndShow(stylizedImage, resultImgElt);
+    // モデルのロード
+    const modelUrl = 'model/arbitrary-image-stylization/model.json';
+    model = await tf.loadGraphModel(modelUrl);
 
-            // メモリの解放
-            contentImage.dispose(); styleImage.dispose(); model.dispose();
-        });
-    };
+    // スタイル変換
+    let stylizedImage = model.execute([contentImage, styleImage]);
+
+    // 画像を表示
+    await adjustForCanvasAndShow(stylizedImage, resultImgElt);
+
+    // メモリの解放
+    contentImage.dispose(); styleImage.dispose(); model.dispose();
 }
 
-function transformStyleAnimeForest(srcImgElt, resultImgElt) {
-    transformArbitraryImageStylization(srcImgElt, resultImgElt, 'image/style-image/animeForest.png');
+// アニメの森みたいな画風
+async function transformStyleAnimeForest(srcImgElt, resultImgElt) {
+    await transformArbitraryImageStylization(srcImgElt, resultImgElt, 'image/style-image/animeForest.png');
 }
 
-function transformStyleFuji(srcImgElt, resultImgElt) {
-    transformArbitraryImageStylization(srcImgElt, resultImgElt, 'image/style-image/fuji.jpg');
+// 富士山みたいな画風
+async function transformStyleFuji(srcImgElt, resultImgElt) {
+    await transformArbitraryImageStylization(srcImgElt, resultImgElt, 'image/style-image/fuji.jpg');
 }
 
-function transformStyleMoon(srcImgElt, resultImgElt) {
-    transformArbitraryImageStylization(srcImgElt, resultImgElt, 'image/style-image/moon.jpg');
+// 月面みたいな画風
+async function transformStyleMoon(srcImgElt, resultImgElt) {
+    await transformArbitraryImageStylization(srcImgElt, resultImgElt, 'image/style-image/moon.jpg');
 }
 
-function transformStyleNewspaper(srcImgElt, resultImgElt) {
-    transformArbitraryImageStylization(srcImgElt, resultImgElt, 'image/style-image/newspaper.jpg');
+// 新聞紙みたいな画風
+async function transformStyleNewspaper(srcImgElt, resultImgElt) {
+    await transformArbitraryImageStylization(srcImgElt, resultImgElt, 'image/style-image/newspaper.jpg');
 }
 
-function transformStylePolkaDot(srcImgElt, resultImgElt) {
-    transformArbitraryImageStylization(srcImgElt, resultImgElt, 'image/style-image/polkaDot.png');
+// 水玉模様みたいな画風
+async function transformStylePolkaDot(srcImgElt, resultImgElt) {
+    await transformArbitraryImageStylization(srcImgElt, resultImgElt, 'image/style-image/polkaDot.png');
 }
 
-function transformStyleSunsetSky(srcImgElt, resultImgElt) {
-    transformArbitraryImageStylization(srcImgElt, resultImgElt, 'image/style-image/sunsetSky.jpg');
+// 夕焼けの空みたいな画風
+async function transformStyleSunsetSky(srcImgElt, resultImgElt) {
+    await transformArbitraryImageStylization(srcImgElt, resultImgElt, 'image/style-image/sunsetSky.jpg');
 }
 
-
-
-
-
-
-
-function readImageAndAdjustForModel(pixels) {
-    const max_dim = 512; // 画像の最大辺の長さ
+// 画像を読み込んでモデルに合わせて変換
+function readAndAdjustForModel(pixels) {
+    const MAX_LENGTH = 512; // 画像の最大辺の長さ
     return tf.tidy(() => {
         // 画像を読み込む
         let image = tf.browser.fromPixels(pixels);
 
         // リサイズ
         const shape = image.shape.slice(0, 2);
-        const longestDim = Math.max(shape[0], shape[1]);
-        const scale = max_dim / longestDim;
+        const longerDim = Math.max(shape[0], shape[1]);
+        const scale = MAX_LENGTH / longerDim;
         const newShape = shape.map(dim => Math.round(dim * scale));
         image = tf.image.resizeBilinear(image, newShape);
 
@@ -136,15 +150,30 @@ function readImageAndAdjustForModel(pixels) {
     });
 }
 
-function adjustForCanvasAndShow(image, resultImgElt) {
-    tf.tidy(() => {
-        // キャンバスに合わせて変換
+// 画像をキャンバスに合わせて変換して表示
+async function adjustForCanvasAndShow(image, resultImgElt) {
+    // キャンバスに合わせて変換
+    image = tf.tidy(() => {
         image = tf.mul(image, 255);
         image = tf.squeeze(image, 0);
         image = tf.cast(image, 'int32');
-
-        // 画像を表示
-        tf.browser.toPixels(image, resultImgElt);
+        return image;
     });
+
+    // 画像を表示
+    await tf.browser.toPixels(image, resultImgElt);
+
+    // メモリの解放
+    image.dispose();
 }
 
+// パスから画像を読み込む
+async function loadImage(path) {
+    const imageElt = new Image();
+    imageElt.src = path;
+    return new Promise((resolve) => {
+        imageElt.onload = () => {
+            resolve(imageElt);
+        }
+    });
+}
