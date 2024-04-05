@@ -48,7 +48,7 @@ window.onload = function () {
     }
 
     // 変換ボタンが押されたときの処理
-    transformButtonElt.addEventListener('click', function () {
+    transformButtonElt.addEventListener('click', async function () {
         // 画像が読み込まれていない場合は何もしない
         if (!isImageSelected) return;
         // ボタンを無効化
@@ -56,8 +56,9 @@ window.onload = function () {
         // ローディングアニメーションを表示
         transformLoadingElt.style.visibility = 'visible';
         // 変換処理
-        console.log('transform name: ', currentTransform.name);
-        currentTransform(srcImgElt, resultImgElt);
+        console.log('transform start: ', currentTransform.name);
+        await currentTransform(srcImgElt, resultImgElt);
+        console.log('transform done: ', currentTransform.name);
         // ローディングアニメーションを非表示
         transformLoadingElt.style.visibility = 'hidden';
         // ボタンを有効化
